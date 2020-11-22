@@ -30,6 +30,12 @@ namespace CheckAndConvertJpegFile
             comboBox1.Items.Add("75");
             // JPEG Output Quality Default = 95
             comboBox1.Text = "95";
+
+            // Output File Name = Prefix + Base File Name + Postfix + ext
+            // File Name Prefix
+            textBox2.Text = "out_";
+            // File Name Postfix
+            textBox3.Text = "";
         }
 
         private void CheckAndConvertJpegFile(string inputFilePath)
@@ -110,8 +116,11 @@ namespace CheckAndConvertJpegFile
             string fileExt = ".jpg";
             string filePath = Path.GetDirectoryName(inputFilePath);
 
-            // Add Prefix "bl_"
-            string outFilePath = Path.Combine(filePath, "bl_" + fileName + fileExt);
+            // Add Prefix and Postfix
+            string prefix = textBox2.Text;
+            string postfix = textBox3.Text;
+            string outFileName = prefix + fileName + postfix + fileExt;
+            string outFilePath = Path.Combine(filePath, outFileName);
             if (File.Exists(outFilePath) && !checkBox2.Checked)
             {
                 label2.Text = "Exists Same Filename";
