@@ -36,6 +36,16 @@ namespace CheckAndConvertJpegFile
             textBox2.Text = "out_";
             // File Name Postfix
             textBox3.Text = "";
+
+            // Output Directory Path
+            // var pathWithEnv = @"%USERPROFILE%\Pictures";
+            // var filePath = Environment.ExpandEnvironmentVariables(pathWithEnv);
+            var filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            textBox4.Text = filePath;
+            if (!checkBox3.Checked)
+            {
+                checkBox3.Checked = true;
+            }
         }
 
         private void CheckAndConvertJpegFile(string inputFilePath)
@@ -120,6 +130,11 @@ namespace CheckAndConvertJpegFile
             string prefix = textBox2.Text;
             string postfix = textBox3.Text;
             string outFileName = prefix + fileName + postfix + fileExt;
+            // Output Directory Path
+            if (!checkBox3.Checked)
+            {
+                filePath = textBox4.Text;
+            }
             string outFilePath = Path.Combine(filePath, outFileName);
             if (File.Exists(outFilePath) && !checkBox2.Checked)
             {
@@ -237,6 +252,55 @@ namespace CheckAndConvertJpegFile
         private void label1_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.neko.ne.jp/~freewing/");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Select Output Directory Path
+            string filePath = textBox4.Text;
+            if (!Directory.Exists(filePath))
+            {
+                filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            }
+
+            // Select Folder UI type
+            bool b = false;
+            if (b)
+            {
+                FolderBrowserDialog foldereDialog = new FolderBrowserDialog();
+                foldereDialog.Description = "Select Output Folder";
+                foldereDialog.RootFolder = Environment.SpecialFolder.Desktop;
+                foldereDialog.SelectedPath = filePath;
+                foldereDialog.ShowNewFolderButton = true;
+                if (foldereDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    filePath = foldereDialog.SelectedPath;
+                    textBox4.Text = filePath;
+                }
+            }
+            else
+            {
+                // Select Output Directory Path
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.InitialDirectory = filePath;
+                fileDialog.ValidateNames = false;
+                fileDialog.CheckFileExists = false;
+                fileDialog.CheckPathExists = true;
+                fileDialog.Title = "Select Output Folder";
+                fileDialog.FileName = "(Select Output Folder)";
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = Path.GetDirectoryName(fileDialog.FileName);
+                    textBox4.Text = filePath;
+                }
+            }
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            button1.Enabled = !cb.Checked;
+            textBox4.Enabled = !cb.Checked;
         }
     }
 }
