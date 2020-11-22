@@ -16,11 +16,38 @@ namespace CheckAndConvertJpegFile
             textBox1.Text = "Convert Progressive JPEG to Baseline JPEG\r\n for HackBGRT MULTI\r\nhttps://github.com/FREEWING-JP/HackBGRT";
             textBox1.Select(0, 0);
             label2.Text = "Drag and Drop JPEG file here";
+
+            // JPEG Output Quality
+            comboBox1.Items.Add("100");
+            comboBox1.Items.Add("97");
+            comboBox1.Items.Add("95");
+            comboBox1.Items.Add("90");
+            comboBox1.Items.Add("88");
+            comboBox1.Items.Add("85");
+            comboBox1.Items.Add("82");
+            comboBox1.Items.Add("80");
+            comboBox1.Items.Add("77");
+            comboBox1.Items.Add("75");
+            // JPEG Output Quality Default = 95
+            comboBox1.Text = "95";
         }
 
         private void CheckAndConvertJpegFile(string inputFilePath)
         {
             label2.Text = "";
+
+            string qltyStr = comboBox1.Text;
+            int qlty = 0;
+            if (!int.TryParse(qltyStr, out qlty))
+            {
+                label2.Text = "Quality Error";
+                return;
+            }
+            if ((qlty > 100) || (qlty < 0))
+            {
+                label2.Text = "Quality must be 0 - 100";
+                return;
+            }
 
             if (CheckFileExtensionIsJpeg(inputFilePath))
             {
@@ -99,7 +126,8 @@ namespace CheckAndConvertJpegFile
 
                     // https://developers.google.com/speed/docs/insights/OptimizeImages
                     // long GOOGLE_OPTIMIZE_JPEG_QUALUTY = 85L;
-                    long JPEG_QUALUTY = 95L;
+                    // long JPEG_QUALUTY = 95L;
+                    long JPEG_QUALUTY = qlty;
                     EncoderParameters parameters = new EncoderParameters(3);
                     parameters.Param[0] = new EncoderParameter(Encoder.Quality, JPEG_QUALUTY);
                     parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodNonInterlaced);
