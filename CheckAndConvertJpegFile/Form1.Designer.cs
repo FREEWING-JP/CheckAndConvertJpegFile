@@ -43,6 +43,8 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label2
@@ -52,7 +54,7 @@
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(345, 30);
-            this.label2.TabIndex = 10;
+            this.label2.TabIndex = 11;
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBox1
@@ -68,10 +70,10 @@
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label1.Location = new System.Drawing.Point(140, 180);
+            this.label1.Location = new System.Drawing.Point(140, 200);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(215, 20);
-            this.label1.TabIndex = 9;
+            this.label1.TabIndex = 10;
             this.label1.Text = "http://www.neko.ne.jp/~freewing/";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -101,18 +103,18 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(80, 175);
+            this.comboBox1.Location = new System.Drawing.Point(300, 175);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(50, 20);
-            this.comboBox1.TabIndex = 8;
+            this.comboBox1.TabIndex = 9;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 180);
+            this.label3.Location = new System.Drawing.Point(225, 180);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 12);
-            this.label3.TabIndex = 14;
+            this.label3.TabIndex = 16;
             this.label3.Text = "JPEG Qlty.";
             // 
             // label4
@@ -121,7 +123,7 @@
             this.label4.Location = new System.Drawing.Point(5, 155);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 12);
-            this.label4.TabIndex = 12;
+            this.label4.TabIndex = 13;
             this.label4.Text = "File Name Prefix";
             // 
             // textBox2
@@ -137,7 +139,7 @@
             this.label5.Location = new System.Drawing.Point(170, 155);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(48, 12);
-            this.label5.TabIndex = 13;
+            this.label5.TabIndex = 14;
             this.label5.Text = "Postfix";
             // 
             // textBox3
@@ -153,7 +155,7 @@
             this.label6.Location = new System.Drawing.Point(5, 85);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 12);
-            this.label6.TabIndex = 11;
+            this.label6.TabIndex = 12;
             this.label6.Text = "Output Directory";
             // 
             // checkBox3
@@ -185,12 +187,33 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(95, 175);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(125, 20);
+            this.comboBox2.TabIndex = 8;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(5, 180);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(87, 12);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Image Format";
+            // 
             // Form1
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(354, 197);
+            this.ClientSize = new System.Drawing.Size(354, 217);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.checkBox3);
@@ -236,6 +259,8 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label7;
     }
 }
 

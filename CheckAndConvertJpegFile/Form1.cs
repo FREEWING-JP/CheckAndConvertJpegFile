@@ -46,26 +46,38 @@ namespace CheckAndConvertJpegFile
             {
                 checkBox3.Checked = true;
             }
+
+            // Image Output Format
+            comboBox2.Items.Add("JPEG Baseline");
+            comboBox2.Items.Add("JPEG Progressive");
+            comboBox2.Items.Add("PNG");
+            comboBox2.Items.Add("BMP");
+            // Default = JPEG Baseline
+            comboBox2.SelectedIndex = 0;
         }
 
         private void CheckAndConvertJpegFile(string inputFilePath)
         {
             label2.Text = "";
 
-            string qltyStr = comboBox1.Text;
             int qlty = 0;
-            if (!int.TryParse(qltyStr, out qlty))
+            if (comboBox2.SelectedIndex <= 1)
             {
-                label2.Text = "Quality Error";
-                return;
-            }
-            if ((qlty > 100) || (qlty < 0))
-            {
-                label2.Text = "Quality must be 0 - 100";
-                return;
+                string qltyStr = comboBox1.Text;
+                if (!int.TryParse(qltyStr, out qlty))
+                {
+                    label2.Text = "Quality Error";
+                    return;
+                }
+                if ((qlty > 100) || (qlty < 0))
+                {
+                    label2.Text = "Quality must be 0 - 100";
+                    return;
+                }
             }
 
-            if (CheckFileExtensionIsJpeg(inputFilePath))
+            // Skip JPEG Progressive Check
+            if (false && CheckFileExtensionIsJpeg(inputFilePath))
             {
 
                 // [SOI 0xFFD8]-[SOF 0xFFCx]-[SOS 0xFFDA]
@@ -122,8 +134,18 @@ namespace CheckAndConvertJpegFile
                 }
             }
 
-            string fileName = Path.GetFileNameWithoutExtension(inputFilePath);
+            // Image Format
             string fileExt = ".jpg";
+            if (comboBox2.SelectedIndex == 2)
+            {
+                fileExt = ".png";
+            }
+            else if (comboBox2.SelectedIndex == 3)
+            {
+                fileExt = ".bmp";
+            }
+
+            string fileName = Path.GetFileNameWithoutExtension(inputFilePath);
             string filePath = Path.GetDirectoryName(inputFilePath);
 
             // Add Prefix and Postfix
@@ -146,21 +168,49 @@ namespace CheckAndConvertJpegFile
             {
                 using (Image source = Image.FromFile(inputFilePath))
                 {
-                    ImageCodecInfo codec = ImageCodecInfo.GetImageEncoders().First(c => c.MimeType == "image/jpeg");
-
                     // https://developers.google.com/speed/docs/insights/OptimizeImages
                     // long GOOGLE_OPTIMIZE_JPEG_QUALUTY = 85L;
                     // long JPEG_QUALUTY = 95L;
-                    long JPEG_QUALUTY = qlty;
-                    EncoderParameters parameters = new EncoderParameters(3);
-                    parameters.Param[0] = new EncoderParameter(Encoder.Quality, JPEG_QUALUTY);
-                    parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodNonInterlaced);
-                    parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderNonProgressive);
-                    // parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
-                    // parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodInterlaced);
-                    // parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderProgressive);
+                    if (comboBox2.SelectedIndex == 0)
+                    {
+                        // Baseline JPEG
+                        var formatId = ImageFormat.Jpeg.Guid;
+                        ImageCodecInfo codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == formatId);
 
-                    source.Save(outFilePath, codec, parameters);
+                        long JPEG_QUALUTY = qlty;
+
+                        EncoderParameters parameters = new EncoderParameters(3);
+                        parameters.Param[0] = new EncoderParameter(Encoder.Quality, JPEG_QUALUTY);
+                        parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodNonInterlaced);
+                        parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderNonProgressive);
+                        source.Save(outFilePath, codec, parameters);
+                    }
+                    else if (comboBox2.SelectedIndex == 1)
+                    {
+                        // TODO: Windows XP 32bit Not Work
+                        // TODO: Windows 10 20H2 64bit Not Work
+                        // Progressive JPEG
+                        var formatId = ImageFormat.Jpeg.Guid;
+                        ImageCodecInfo codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == formatId);
+
+                        long JPEG_QUALUTY = qlty;
+
+                        EncoderParameters parameters = new EncoderParameters(3);
+                        parameters.Param[0] = new EncoderParameter(Encoder.Quality, JPEG_QUALUTY);
+                        parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodInterlaced);
+                        parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderProgressive);
+                        source.Save(outFilePath, codec, parameters);
+                    }
+                    else if (comboBox2.SelectedIndex == 2)
+                    {
+                        // PNG
+                        source.Save(outFilePath, ImageFormat.Png);
+                    }
+                    else if (comboBox2.SelectedIndex == 3)
+                    {
+                        // Bitmap
+                        source.Save(outFilePath, ImageFormat.Bmp);
+                    }
 
                     label2.Text = "Convert OK";
                 }
@@ -301,6 +351,13 @@ namespace CheckAndConvertJpegFile
             CheckBox cb = (CheckBox)sender;
             button1.Enabled = !cb.Checked;
             textBox4.Enabled = !cb.Checked;
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var enabled = (comboBox2.SelectedIndex <= 1);
+            label3.Enabled = enabled;
+            comboBox1.Enabled = enabled;
         }
     }
 }
