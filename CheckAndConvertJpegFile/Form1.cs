@@ -103,7 +103,7 @@ namespace CheckAndConvertJpegFile
                     EncoderParameters parameters = new EncoderParameters(3);
                     parameters.Param[0] = new EncoderParameter(Encoder.Quality, JPEG_QUALUTY);
                     parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodNonInterlaced);
-                    parameters.Param[2] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.RenderNonProgressive);
+                    parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderNonProgressive);
                     // parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
                     // parameters.Param[1] = new EncoderParameter(Encoder.ScanMethod, (int)EncoderValue.ScanMethodInterlaced);
                     // parameters.Param[2] = new EncoderParameter(Encoder.RenderMethod, (int)EncoderValue.RenderProgressive);
